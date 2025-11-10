@@ -2,7 +2,6 @@ package core.basesyntax.service.impl;
 
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.Converter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class ConverterImpl implements Converter {
         List<FruitTransaction> transactions = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
-            if(line.isEmpty()) {
+            if (line.isEmpty()) {
                 continue;
             }
             String[] parts = line.split(",");
@@ -29,7 +28,7 @@ public class ConverterImpl implements Converter {
             try {
                 quantity = Integer.parseInt(quantityLine);
             } catch (NumberFormatException e) {
-                throw new RuntimeException("Incorrect number in a line " + (i + 1));
+                throw new RuntimeException("Incorrect number in a line " + (i + 1), e);
             }
             if (quantity < 0) {
                 throw new RuntimeException("Quantity can't be negative");
@@ -39,5 +38,15 @@ public class ConverterImpl implements Converter {
         return transactions;
     }
 
-
+    private FruitTransaction.Operation parseOperation(String operationSymbol,
+                                                      String line, int lineIndex) {
+        for (FruitTransaction.Operation operation
+                : FruitTransaction.Operation.values()) {
+            if (operation.getCode().equalsIgnoreCase(operationSymbol)) {
+                return operation;
+            }
+        }
+        throw new RuntimeException("Invalid operation symbol '" + operationSymbol
+                + "' at line " + lineIndex + ": " + line);
+    }
 }

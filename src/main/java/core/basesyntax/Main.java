@@ -4,79 +4,49 @@ import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.Converter;
 import core.basesyntax.service.ReaderService;
 import core.basesyntax.service.ReportGenerator;
+import core.basesyntax.service.ShopService;
 import core.basesyntax.service.WriteService;
+import core.basesyntax.service.impl.ConverterImpl;
+import core.basesyntax.service.impl.ReaderServiceImpl;
+import core.basesyntax.service.impl.ReportGeneratorImpl;
+import core.basesyntax.service.impl.ShopServiceImpl;
+import core.basesyntax.service.impl.WriteServiceImpl;
+import core.basesyntax.strategy.BalanceHandler;
+import core.basesyntax.strategy.OperationHandler;
 import core.basesyntax.strategy.OperationStrategy;
-
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.CharBuffer;
+import core.basesyntax.strategy.PurchaseHandler;
+import core.basesyntax.strategy.ReturnHandler;
+import core.basesyntax.strategy.SupplyHandler;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
-    public static void main(String[] arg) {
-        ReaderService readerService = new ReaderService() {
-            @Override
-            public List<String> read(String path) {
-                return null;
-            }
-        };
-        List<String> inputReport = readerService.read(CharBuffer.wrap("reportToRead.csv"));
+    private static final String INPUT_FILE = "src/main/resources/reportToRead.csv";
+    private static final String OUTPUT_FILE = "src/main/resources/reportResult.csv";
 
-        Converter converter = new Converter() {
-            @Override
-            public List<FruitTransaction> convert(List<String> lines) {
-                return null;
-            }
-        };
+    public static void main(String[] args) {
+        ReaderService readerService = new ReaderServiceImpl();
+        Converter converter = new ConverterImpl();
 
-        OperationStrategy operationStrategy = new OperationStrategy();
+        Map<FruitTransaction.Operation, OperationHandler> operationHandlers = new HashMap<>();
+        operationHandlers.put(FruitTransaction.Operation.BALANCE, new BalanceHandler());
+        operationHandlers.put(FruitTransaction.Operation.PURCHASE, new PurchaseHandler());
+        operationHandlers.put(FruitTransaction.Operation.RETURN, new ReturnHandler());
+        operationHandlers.put(FruitTransaction.Operation.SUPPLY, new SupplyHandler());
 
-        Process process = new Process() {
-            @Override
-            public OutputStream getOutputStream() {
-                return null;
-            }
+        OperationStrategy operationStrategy = new OperationStrategy(operationHandlers);
 
-            @Override
-            public InputStream getInputStream() {
-                return null;
-            }
+        ShopService shopService = new ShopServiceImpl(operationStrategy);
+        WriteService writeService = new WriteServiceImpl();
+        ReportGenerator reportGenerator = new ReportGeneratorImpl();
+        String report = reportGenerator.getReport();
 
-            @Override
-            public InputStream getErrorStream() {
-                return null;
-            }
+        List<String> lines = readerService.read(INPUT_FILE);
+        List<FruitTransaction> transactions = converter.convert(lines);
+        shopService.process(transactions);
+        writeService.write(report, OUTPUT_FILE);
 
-            @Override
-            public int waitFor() throws InterruptedException {
-                return 0;
-            }
-
-            @Override
-            public int exitValue() {
-                return 0;
-            }
-
-            @Override
-            public void destroy() {
-
-            }
-        };
-
-        ReportGenerator reportGenerator = new ReportGenerator() {
-            @Override
-            public String getReport() {
-                return null;
-            }
-        };
-
-        WriteService writeService = new WriteService() {
-            @Override
-            public void write(String report, String path) {
-
-            }
-        };
-
+        System.out.println("Report successfully generated: " + OUTPUT_FILE);
     }
 }
