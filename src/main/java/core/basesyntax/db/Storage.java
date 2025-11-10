@@ -13,4 +13,8 @@ public class Storage {
     public static Integer getOrDefault(Object key, Integer defaultValue) {
         return fruits.getOrDefault(key, defaultValue);
     }
+
+    public static Map<String, Integer> getFruits() {
+        return new HashMap<>(fruits);
+    }
 }

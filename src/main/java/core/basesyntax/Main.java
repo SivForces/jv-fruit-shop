@@ -36,15 +36,14 @@ public class Main {
         operationHandlers.put(FruitTransaction.Operation.SUPPLY, new SupplyHandler());
 
         OperationStrategy operationStrategy = new OperationStrategy(operationHandlers);
-
         ShopService shopService = new ShopServiceImpl(operationStrategy);
         WriteService writeService = new WriteServiceImpl();
         ReportGenerator reportGenerator = new ReportGeneratorImpl();
-        String report = reportGenerator.getReport();
 
         List<String> lines = readerService.read(INPUT_FILE);
         List<FruitTransaction> transactions = converter.convert(lines);
         shopService.process(transactions);
+        String report = reportGenerator.getReport();
         writeService.write(report, OUTPUT_FILE);
 
         System.out.println("Report successfully generated: " + OUTPUT_FILE);

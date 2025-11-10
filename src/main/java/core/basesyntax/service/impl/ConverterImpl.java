@@ -46,7 +46,6 @@ public class ConverterImpl implements Converter {
                 return operation;
             }
         }
-        throw new RuntimeException("Invalid operation symbol '" + operationSymbol
-                + "' at line " + lineIndex + ": " + line);
+        throw new RuntimeException("Invalid operation symbol '" + (lineIndex + 1));
     }
 }
