@@ -1,7 +1,6 @@
 package core.basesyntax.service.impl;
 
 import core.basesyntax.model.FruitTransaction;
-import core.basesyntax.model.Operation;
 import core.basesyntax.service.Converter;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class ConverterImpl implements Converter {
             String operationSymbol = parts[0].trim();
             String fruit = parts[1].trim();
             String quantityLine = parts[2].trim();
-            Operation operation = parseOperation(operationSymbol, line, i);
+            FruitTransaction.Operation operation = parseOperation(operationSymbol, line, i);
             int quantity;
             try {
                 quantity = Integer.parseInt(quantityLine);

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reader implements ReaderService {
+public class ReaderServiceImpl implements ReaderService {
     @Override
     public List<String> read(String path) {
         List<String> lines = new ArrayList<>();

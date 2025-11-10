@@ -5,7 +5,7 @@ public class FruitTransaction {
     private String fruit;
     private int quantity;
 
-    public core.basesyntax.model.Operation getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 

@@ -7,7 +7,7 @@ public class ReturnHandler implements OperationHandler {
     @Override
     public void apply(FruitTransaction transaction) {
         String fruit = transaction.getFruit();
-        int current = Storage.fruits.getOrDefault(fruit, 0);
-        Storage.fruits.put(fruit, current + transaction.getQuantity());
+        int current = Storage.getOrDefault(fruit, 0);
+        Storage.put(fruit, current + transaction.getQuantity());
     }
 }

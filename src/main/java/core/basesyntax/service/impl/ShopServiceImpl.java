@@ -17,6 +17,9 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void process(List<FruitTransaction> transactions) {
         for (FruitTransaction transaction : transactions) {
+            if (transaction == null) {
+                throw new NullPointerException("There is a null value");
+            }
             OperationHandler handler = operationStrategy.get(transaction.getOperation());
             handler.apply(transaction);
         }
