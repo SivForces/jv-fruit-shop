@@ -1,6 +1,7 @@
 package core.basesyntax;
 
 import core.basesyntax.model.FruitTransaction;
+import core.basesyntax.model.Operation;
 import core.basesyntax.service.Converter;
 import core.basesyntax.service.ReaderService;
 import core.basesyntax.service.ReportGenerator;
@@ -29,11 +30,11 @@ public class Main {
         ReaderService readerService = new ReaderServiceImpl();
         Converter converter = new ConverterImpl();
 
-        Map<FruitTransaction.Operation, OperationHandler> operationHandlers = new HashMap<>();
-        operationHandlers.put(FruitTransaction.Operation.BALANCE, new BalanceHandler());
-        operationHandlers.put(FruitTransaction.Operation.PURCHASE, new PurchaseHandler());
-        operationHandlers.put(FruitTransaction.Operation.RETURN, new ReturnHandler());
-        operationHandlers.put(FruitTransaction.Operation.SUPPLY, new SupplyHandler());
+        Map<Operation, OperationHandler> operationHandlers = new HashMap<>();
+        operationHandlers.put(Operation.BALANCE, new BalanceHandler());
+        operationHandlers.put(Operation.PURCHASE, new PurchaseHandler());
+        operationHandlers.put(Operation.RETURN, new ReturnHandler());
+        operationHandlers.put(Operation.SUPPLY, new SupplyHandler());
 
         OperationStrategy operationStrategy = new OperationStrategy(operationHandlers);
         ShopService shopService = new ShopServiceImpl(operationStrategy);
